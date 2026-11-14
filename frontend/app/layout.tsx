@@ -1,0 +1,2 @@
+// LLM: Root application layout with global styles and toast notifications.
+import './globals.css';import {Toaster} from 'sonner';export const metadata={title:'FocusFlow — Make room for meaningful work',description:'A calm space to organize your tasks and find your flow.'};export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body>{children}<Toaster richColors position="bottom-right"/></body></html>;}

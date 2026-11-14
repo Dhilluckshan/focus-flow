@@ -1,0 +1,14 @@
+node_modules/
+.next/
+dist/
+*.log
+*.db
+*.db-journal
+
+.env
+.env.*
+!.env.example
+*.pid
+*.tsbuildinfo
+*.db-*
+

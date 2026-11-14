@@ -1,0 +1,2 @@
+// LLM: Display a task status as a compact shadcn badge.
+import {cn} from '@/lib/utils';export function Badge({className,...props}:React.ComponentProps<'span'>){return <span className={cn('badge',className)} {...props}/>;}
