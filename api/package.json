@@ -22,7 +22,7 @@
     "@types/node": "^24.0.0",
     "prisma": "6.19.3",
     "tsx": "^4.20.0",
-    "typescript": "^5.9.0"
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "deepmerge-ts": "8.0.0"
