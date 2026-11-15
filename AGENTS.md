@@ -8,7 +8,7 @@ NestJS, Prisma and SQLite in `backend/`. Next.js App Router, React and Tailwind 
 | Develop | `npm run dev --prefix backend` and `npm run dev --prefix frontend` |
 | Test | `npm run test:isolated` after generating Prisma Client and building the API |
 | Build and type-check | `npm run build` |
-| Docs | See `docs/ARCHITECTURE.md` and `docs/TESTING.md` |
+| Docs | Keep project documentation in `README.md`. Store UI screenshots in `docs/assets/`. |
 | Lint and bench | Tooling pending |
 
 Write tests before implementation, use Conventional Commits, and keep diffs small. Keep task rules independent of HTTP, validate inputs at boundaries, and use explicit names. Update commands here as tooling changes.
