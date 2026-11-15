@@ -1,19 +1,59 @@
-import { Body, Controller, Get, Post, Patch, Delete, Param, HttpCode } from '@nestjs/common';
-import { TasksService } from './tasks.service';
+import {
+  BadRequestException, Body, Controller, Delete, Get, Headers, HttpCode,
+  Param, Patch, Post, Query, Res,
+} from '@nestjs/common';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
+import { TaskQuery } from './task-query';
+import { TasksService } from './tasks.service';
+
+type ResponseHeaders = { setHeader(name: string, value: string): void };
+
 @Controller('tasks')
 export class TasksController {
- // LLM: Inject the task service used by each REST endpoint.
- constructor(private readonly tasks:TasksService){}
- // LLM: List every saved task.
- @Get() findAll(){return this.tasks.findAll();}
- // LLM: Return a single task by its identifier.
- @Get(':id') findOne(@Param('id') id:string){return this.tasks.findOne(id);}
- // LLM: Create a task from a validated request body.
- @Post() create(@Body() dto:CreateTaskDto){return this.tasks.create(dto);}
- // LLM: Apply validated changes to a task.
- @Patch(':id') update(@Param('id') id:string,@Body() dto:UpdateTaskDto){return this.tasks.update(id,dto);}
- // LLM: Delete a task and return an empty success response.
- @Delete(':id') @HttpCode(204) remove(@Param('id') id:string){return this.tasks.remove(id);}
-}
+  constructor(private readonly tasks: TasksService) {}
 
+  @Get()
+  findAll(@Query() query: TaskQuery) {
+    return this.tasks.list(query);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string, @Res({ passthrough: true }) response: ResponseHeaders) {
+    const task = await this.tasks.findOne(id);
+    response.setHeader('ETag', `"${task.version}"`);
+    return task;
+  }
+
+  @Post()
+  create(@Body() dto: CreateTaskDto) {
+    return this.tasks.create(dto);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateTaskDto,
+    @Headers('if-match') ifMatch: string | undefined,
+    @Res({ passthrough: true }) response: ResponseHeaders,
+  ) {
+    const match = ifMatch?.match(/^"([1-9]\d*)"$/);
+    if (ifMatch !== undefined && (!match || !Number.isSafeInteger(Number(match[1])))) {
+      throw new BadRequestException('If-Match must contain one quoted task version.');
+    }
+    const task = await this.tasks.update(id, dto, match ? Number(match[1]) : undefined);
+    response.setHeader('ETag', `"${task.version}"`);
+    return task;
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  remove(@Param('id') id: string) {
+    return this.tasks.remove(id);
+  }
+
+  @Post(':id/restore')
+  @HttpCode(200)
+  restore(@Param('id') id: string) {
+    return this.tasks.restore(id);
+  }
+}

@@ -19,4 +19,11 @@ model Task {
   status Status @default(TODO)
   dueDate DateTime?
   createdAt DateTime @default(now())
+  version Int @default(1)
+  deletedAt DateTime?
+
+  @@index([deletedAt, createdAt, id])
+  @@index([deletedAt, dueDate, id])
+  @@index([deletedAt, status, createdAt, id])
+  @@index([deletedAt, status, dueDate, id])
 }
