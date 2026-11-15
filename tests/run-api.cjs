@@ -4,7 +4,7 @@ const { tmpdir } = require('node:os');
 const { join, resolve } = require('node:path');
 const { once } = require('node:events');
 
-const backend = resolve(__dirname, '../backend');
+const backend = resolve(__dirname, '../api');
 const directory = mkdtempSync(join(tmpdir(), 'focusflow-test-'));
 const env = {
   ...process.env,

@@ -25,10 +25,10 @@ Use **Node.js 24.13.0** (see [`.nvmrc`](.nvmrc)) and npm. Clone the repo, then r
 ```powershell
 git clone https://github.com/Dhilluckshan/focus-flow.git
 cd focus-flow
-Copy-Item backend/.env.example backend/.env
-npm ci --prefix backend
-npm ci --prefix frontend
-npm run db:setup --prefix backend
+Copy-Item api/.env.example api/.env
+npm ci --prefix api
+npm ci --prefix web
+npm run db:setup --prefix api
 npm run build
 ```
 
@@ -36,22 +36,22 @@ Start the API and web app in separate terminals from the repo root.
 
 ```sh
 # Terminal 1
-npm start --prefix backend
+npm start --prefix api
 
 # Terminal 2
-npm start --prefix frontend
+npm start --prefix web
 ```
 
 Open [the dashboard](http://localhost:3000). The direct API is at [localhost:3001/tasks](http://localhost:3001/tasks). A new database starts empty. The setup command generates the Prisma client and applies pending migrations, including the migration that adds versioning and reversible deletion to existing tasks.
 
 | Setting | Default | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | `file:./dev.db` | Prisma’s SQLite file, relative to the schema directory for this default. Start with [the backend environment example](backend/.env.example). |
+| `DATABASE_URL` | `file:./dev.db` | Prisma’s SQLite file, relative to the schema directory for this default. Start with [the backend environment example](api/.env.example). |
 | `PORT` | `3001` | API listen port. Set it in the API process environment to change it. |
 | `FRONTEND_ORIGIN` | `http://localhost:3000` | Allowed origin for cross-origin browser requests. Set it in the API process environment when needed. |
 | `API_INTERNAL_URL` | `http://127.0.0.1:3001` | Next.js rewrite target. Set it before building the frontend when using a different API address. |
 
-For frontend development, use `npm run dev --prefix frontend` while the API is running. If the dashboard can’t load tasks, check the direct API URL first. After changing the rewrite target, rebuild the frontend.
+For frontend development, use `npm run dev --prefix web` while the API is running. If the dashboard can’t load tasks, check the direct API URL first. After changing the rewrite target, rebuild the frontend.
 
 ### Run with Docker Compose
 
@@ -88,9 +88,9 @@ flowchart LR
 
 | Layer | Responsibility |
 | --- | --- |
-| **Web** | The Next.js App Router renders the workspace. React manages filters and task interactions. Tailwind styles the UI, Radix primitives support dialog focus handling, and Sonner displays feedback and Undo. [Dashboard source](frontend/app/page.tsx) |
-| **API** | NestJS checks the request shape, reads HTTP headers, and routes work to the task service. The service applies lifecycle rules and translates missing records and conflicts into HTTP errors. [Controller](backend/src/tasks.controller.ts) · [Service](backend/src/tasks.service.ts) |
-| **Database** | Prisma sends typed queries to SQLite. SQLite keeps data in one file. Write-ahead logging (WAL) lets reads continue during writes in normal operation, while writes still take turns. [Schema](backend/prisma/schema.prisma) |
+| **Web** | The Next.js App Router renders the workspace. React manages filters and task interactions. Tailwind styles the UI, Radix primitives support dialog focus handling, and Sonner displays feedback and Undo. [Dashboard source](web/app/page.tsx) |
+| **API** | NestJS checks the request shape, reads HTTP headers, and routes work to the task service. The service applies lifecycle rules and translates missing records and conflicts into HTTP errors. [Controller](api/src/tasks.controller.ts) · [Service](api/src/tasks.service.ts) |
+| **Database** | Prisma sends typed queries to SQLite. SQLite keeps data in one file. Write-ahead logging (WAL) lets reads continue during writes in normal operation, while writes still take turns. [Schema](api/prisma/schema.prisma) |
 
 The browser always talks to the web app’s origin. Next.js forwards the request and sends the API response back. That keeps the internal API address out of browser-side configuration.
 

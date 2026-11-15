@@ -1,11 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /backend
+    directory: /api
     schedule:
       interval: weekly
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /web
     schedule:
       interval: weekly
   - package-ecosystem: github-actions

@@ -1,11 +1,11 @@
 # FocusFlow
 
-NestJS, Prisma and SQLite in `backend/`. Next.js App Router, React and Tailwind in `frontend/`.
+NestJS, Prisma and SQLite in `api/`. Next.js App Router, React and Tailwind in `web/`.
 
 | Task | Command |
 | --- | --- |
-| Install | `npm ci --prefix backend` and `npm ci --prefix frontend` |
-| Develop | `npm run dev --prefix backend` and `npm run dev --prefix frontend` |
+| Install | `npm ci --prefix api` and `npm ci --prefix web` |
+| Develop | `npm run dev --prefix api` and `npm run dev --prefix web` |
 | Test | `npm run test:isolated` after generating Prisma Client and building the API |
 | Build and type-check | `npm run build` |
 | Docs | Keep project documentation in `README.md`. Store UI screenshots in `docs/assets/`. |

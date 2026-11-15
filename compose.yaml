@@ -1,6 +1,6 @@
 services:
   backend:
-    build: ./backend
+    build: ./api
     ports: ["3001:3001"]
     environment:
       DATABASE_URL: file:/data/focusflow.db
@@ -12,7 +12,7 @@ services:
       timeout: 3s
       retries: 15
   frontend:
-    build: ./frontend
+    build: ./web
     ports: ["3000:3000"]
     environment:
       API_INTERNAL_URL: http://backend:3001
