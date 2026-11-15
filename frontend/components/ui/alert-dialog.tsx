@@ -1,4 +1,3 @@
-// LLM: Accessible shadcn alert-dialog primitives powered by Radix UI.
 'use client';
 import * as Primitive from '@radix-ui/react-alert-dialog';
 import * as React from 'react';
